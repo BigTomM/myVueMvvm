@@ -45,12 +45,14 @@ CompileUtil.setVal = function (vm, exp, newVal) {
     }, vm.$data);
 }
 // 处理文本节点 {{}} 的方法
-CompileUtil.text = function (node, vm, exp) {
+CompileUtil.text = function (node, vm, exp, compile, global) {
     // 获取赋值的方法
     let updateFn = this.updater["textUpdater"];
 
     // 获取 data 中对应的变量的值
     let value = this.getTextVal(vm, exp);
+
+    exp.replace(/index/g,global['index']);
 
     // 通过正则替换，将取到数据中的值替换掉 {{ }}
     exp.replace(/\{\{([^}]+)\}\}/g, (...args) => {
@@ -91,13 +93,18 @@ CompileUtil.model = function (node, vm, exp) {
 }
 
 // 乞丐版 v-for 指令的方法，只能循环数字，后期考虑加入AST来解析exp表达式
-CompileUtil.for = function (node, vm, exp,compile) {
-    let fragment = document.createDocumentFragment();
-    for( let i=0;i<exp;i++){
-       let newNode= node.cloneNode(true);
-       newNode.removeAttribute('v-for');
-       fragment.appendChild(newNode);
+CompileUtil.for = function (node, vm, exp, compile, global) {
+    //可以拿到index,item,list
+    let fragments = document.createDocumentFragment();
+    for (let i = 0; i < exp; i++) {
+        global.index = i;
+        global.item =vm['list'][i];
+        let newNode = node.cloneNode(true);
+        newNode.removeAttribute('v-for');
+        let fragment = document.createDocumentFragment();
+        fragment.appendChild(newNode);
+        compile(fragment);
+        fragments.appendChild(fragment);
     }
-    compile(fragment);
-    node.parentNode.replaceChild(fragment,node);
+    node.parentNode.replaceChild(fragments, node);
 }

@@ -12,7 +12,7 @@
         <ul>
             <li id="qq" data="abc">{{message}}<div data="222">123</div></li>
         </ul>
-        <p v-for="15">{{message}}</p>
+        <!-- <p v-for="index in list">---{{list[index]}}</p> -->
         {{message}}
     </div>
 
@@ -27,7 +27,8 @@
         let vm = new MVVM({
             el: '#app',
             data: {
-                message: 'hello world!'
+                message: 'hello world!',
+                list:[165,4654,65465,564]
             }
         });
     </script>

@@ -2,6 +2,8 @@ class Compile {
     constructor(el, vm) {
         this.el = this.isElmentNode(el) ? el : document.querySelector(el);
         this.vm = vm;
+        this.global = {
+        };
         // 如过传入的根元素存在，才开始编译
         if (this.el) {
             // 1、把这些真实的 Dom 移动到内存中，即 fragment（文档碎片）
@@ -76,7 +78,7 @@ class Compile {
                 let [, type] = attrName.split("-")
 
                 // 调用指令对应得方法
-                CompileUtil[type](node, this.vm, exp,this.compile.bind(this));
+                CompileUtil[type](node, this.vm, exp, this.compile.bind(this),this.global);
             }
 
         })
@@ -92,7 +94,7 @@ class Compile {
 
         // 如果存在 {{}} 则使用 text 指令的方法
         if (reg.test(exp)) {
-            CompileUtil["text"](node, this.vm, exp)
+            CompileUtil["text"](node, this.vm, exp,this.compile.bind(this),this.global)
         }
     }
 
