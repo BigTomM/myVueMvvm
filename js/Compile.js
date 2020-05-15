@@ -35,7 +35,7 @@ class Compile {
 
         // 循环取出根节点中的节点并放入文档碎片中
         // while (el.firstChild && (firstChild = el.removeChild(el.firstChild))) {
-        while (firstChild =el.firstChild) {
+        while (firstChild = el.firstChild) {
             fragment.appendChild(firstChild);
         }
         return fragment;
@@ -76,8 +76,9 @@ class Compile {
                 let [, type] = attrName.split("-")
 
                 // 调用指令对应得方法
-                CompileUtil[type](node, this.vm, exp);
+                CompileUtil[type](node, this.vm, exp,this.compile.bind(this));
             }
+
         })
     }
 
@@ -87,12 +88,12 @@ class Compile {
         let exp = node.textContent
 
         // 创建匹配 {{}} 的正则表达式  /\{\{(.+?)\}\}/g
-        let reg =/\{\{([^}]+)\}\}/g;
+        let reg = /\{\{([^}]+)\}\}/g;
 
-          // 如果存在 {{}} 则使用 text 指令的方法
-          if(reg.test(exp)){
-              CompileUtil["text"](node,this.vm,exp)
-          }
+        // 如果存在 {{}} 则使用 text 指令的方法
+        if (reg.test(exp)) {
+            CompileUtil["text"](node, this.vm, exp)
+        }
     }
 
 }

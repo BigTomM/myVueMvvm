@@ -89,3 +89,15 @@ CompileUtil.model = function (node, vm, exp) {
     // 第一次设置值
     updateFn && updateFn(vm, value)
 }
+
+// 乞丐版 v-for 指令的方法，只能循环数字，后期考虑加入AST来解析exp表达式
+CompileUtil.for = function (node, vm, exp,compile) {
+    let fragment = document.createDocumentFragment();
+    for( let i=0;i<exp;i++){
+       let newNode= node.cloneNode(true);
+       newNode.removeAttribute('v-for');
+       fragment.appendChild(newNode);
+    }
+    compile(fragment);
+    node.parentNode.replaceChild(fragment,node);
+}
