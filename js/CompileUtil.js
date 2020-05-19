@@ -61,9 +61,8 @@ CompileUtil.text = function (node, vm, exp) {
             updateFn && updateFn(node, newValue);
         });
     });
-
     // 第一次设置值
-    updateFn && updateFn(vm, value);
+    updateFn && updateFn(node, value);
 };
 // 处理 v-model 指令的方法
 CompileUtil.model = function (node, vm, exp) {
@@ -87,7 +86,7 @@ CompileUtil.model = function (node, vm, exp) {
         this.setVal(vm, exp, newValue);
     })
     // 第一次设置值
-    updateFn && updateFn(vm, value)
+    updateFn && updateFn(node, value)
 }
 
 // 乞丐版 v-for 指令的方法，只能循环数字，后期考虑加入AST来解析exp表达式
